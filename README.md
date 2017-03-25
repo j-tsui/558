@@ -25,31 +25,30 @@ February 24, 2017
   - **Secure:** Cookie can only be sent over https
   - **HTTPOnly:** Cannot be accessed with JavaScript (prevents most XSS)
   
-  
-  
->         +-----------+                                                       +-----------+
->         |           |                                                       |           |
->         |           |     **POST** \login                                   |           |
->         |           |     Host: cs558web.bu.edu                             |           |
->         |           |     username=attacker&password=l33th4x                |           |
->         |           |  ------------------------------------------------->>  |           |
->         |           |                                                       |           |
->         |           |     **HTTP/1.1** 303 See Other                        |           |
->         |           |     **Location:** http://cs558web.bu.edu/project2/    |           |
->         |           |     **Set-Cookie:** authuser="!28734y8273"            |           |
->         |   USER    |  <<-------------------------------------------------  | WEBSERVER |
->         |           |                                                       |           |
->         |           |     GET /project2/ HTTP/1.1                           |           |
->         |           |     **Host:** cs558web.bu.edu                         |           |
->         |           |     **Cookie:** authuser="!28734y8273";               |           |
->         |           |  ------------------------------------------------->>  |           |
->         |           |                                                       |           |
->         |           |    **HTTP/1.1** 200 OK                                |           |
->         |           |                                                       |           |
->         |           |    <html>...Protected HTML...</html>                  |           |
->         |           |  <<-------------------------------------------------  |           |
->         +-----------+                                                       +-----------+
-  
+```  
+             +-----------+                                                       +-----------+
+             |           |                                                       |           |
+             |           |     POST \login                                       |           |
+             |           |     Host: cs558web.bu.edu                             |           |
+             |           |     username=attacker&password=l33th4x                |           |
+             |           |  ------------------------------------------------->>  |           |
+             |           |                                                       |           |
+             |           |     HTTP/1.1 303 See Other                            |           |
+             |           |     Location: http://cs558web.bu.edu/project2/        |           |
+             |           |     Set-Cookie: authuser="!28734y8273"                |           |
+             |   USER    |  <<-------------------------------------------------  | WEBSERVER |
+             |           |                                                       |           |
+             |           |     GET /project2/ HTTP/1.1                           |           |
+             |           |     Host: cs558web.bu.edu                             |           |
+             |           |     Cookie: authuser="!28734y8273";                   |           |
+             |           |  ------------------------------------------------->>  |           |
+             |           |                                                       |           |
+             |           |    HTTP/1.1 200 OK                                    |           |
+             |           |                                                       |           |
+             |           |    <html>...Protected HTML...</html>                  |           |
+             |           |  <<-------------------------------------------------  |           |
+             +-----------+                                                       +-----------+
+```
   
 ### Zombie Cookies
  - cookie that's automatically recreated after being deleted.
