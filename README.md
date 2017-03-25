@@ -1,30 +1,56 @@
-# 558
+# Web Hacking II - Cookies, SOP, XSS and CSRF
+February 24, 2017
 
-### what's the point of using cookies?
-- to track users and to keep them logged in
-- to remember what's in your shopping card
-- to make websites stateful
+### Tools
+- [EditThisCookie](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?hl=en)
+
+### What's the point of using cookies?
+- To track users and to keep them logged in
+- To remember what's in your shopping cart
+- To make websites stateful
   
-### setting cookies
-- key value pair: aka cookie crumb
-  - KEY=DQAAAK
-- expiration date: if not set, cookie is Session cookie
-- domain: allowed to access cookie
+### Setting Cookies
+- Key=value pair: aka cookie crumb
+- Expiration date: if not set, cookie is Session cookie
+- Domain: allowed to access cookie
   - who can access?
-    - bar.foo.com
-    - *.com
-    - foo.com/bar
+    - bar.foo.com - Yes
+    - *.com - No
+    - foo.com/bar - Yes
   - is .foo.com different from foo.com? NO!!
-- what pages should the cookie set with? path
-- flags (secure, http only, etc.)
+- What pages should the cookie set with? path
+- Flags
+  - HostOnly: Can only be read by same domain that set it, foo.example.com sets it so bar.example.com cannot read it if HostOnly=1
+  - Session: A session cookie expires when the user navigates away from the website
+  - Secure: Cookie can only be sent over https
+  - HTTPOnly: Cannot be accessed with JavaScript (prevents most XSS)
   
-### flags
-- cookies are key=value pairs with metadata
-  - HostOnly: can only be read by same domain that set it, foo.example.com sets it so bar.example.come cannot read it if HostOnly=1
-  - Session: a session cookie expires when the user navigaes away from the website
-  - Secure: cookie can only be sent over https
-  - HttpOnly: cannot be accessed with javascript (prevents most XSS)
-    
+  
+  ```
+  +-----------+                                                       +-----------+
+  |           |                                                       |           |
+  |           |     POST \login                                       |           |
+  |           |     Host: cs558web.bu.edu                             |           |
+  |           |     username=attacker&password=l33th4x                |           |
+  |           |  ------------------------------------------------->>  |           |
+  |           |                                                       |           |
+  |           |     HTTP/1.1 303 See Other                            |           |
+  |           |     Location: http://cs558web.bu.edu/project2/        |           |
+  |           |     Set-Cookie: authuser="!28734y8273"                |           |
+  |   USER    |  <<-------------------------------------------------  | WEBSERVER |
+  |           |                                                       |           |
+  |           |     GET /project2/ HTTP/1.1                           |           |
+  |           |     Host: cs558web.bu.edu                             |           |
+  |           |     Cookie: authuser="!28734y8273";                   |           |
+  |           |  ------------------------------------------------->>  |           |
+  |           |                                                       |           |
+  |           |    HTTP/1.1 200 OK                                    |           |
+  |           |                                                       |           |
+  |           |    <html>...Protected HTML...</html>                  |           |
+  |           |  <<-------------------------------------------------  |           |
+  +-----------+                                                       +-----------+
+  ```
+  
  ### zombie cookies
  - cookei that's automatically recreated after being deleted. This is accomplished by storing the cookie's content in mult locations, such as Flash local shared object, html5 web storage
  
