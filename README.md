@@ -84,7 +84,7 @@ domain=atwola.com;path=/
 - Let's try it!
   - Go to google.com
   - Change location to France (Sean used PIA)
-  - See change at [http://www.ipfingerprints.com/](http://www.ipfingerprints.com/)
+  - See change at http://www.ipfingerprints.com/
   - Refresh google.com
   
 ### Dynamic web pages
@@ -120,17 +120,24 @@ document.write("world: ", a+b, "</b>");
       - Identity of web server is in terms of its hostname, e.g., **bank.com**
 - SOP = **only scripts received from a web page’s origin have access to page’s elements**
 
-### Origin Definition
+#### Origin Definition
 - http://www.example.com:80/dir/page/htm
   - **Protocol:** http://
   - **Host:** www.example.com
   - **Port:** :80
-- port 80
-- port 443
+- **http** operates on port *80* so http://example.com/ = http://example.com:80/
+- **https** operates on port *443* so https://example.com/ = https://example.com:443/	
 
-### same origin policy
-- should it be able to access cookies? green for yes, red for no, yellow - differs by browser
-  - examples go here
+- Should the following be able to access cookies from http://www.example.com? 
+Site | Yes/No/Maybe 
+http://www.example.com/dir/page2.html | Yes
+http://v2.www.example.com/dir/other.html | No
+http://username:password@www.example.com/dir2/other.html | Yes
+http://www.example.com:81/dir/other.html | No
+https://www.example.com/dir/other.html | No
+http://en.example.com/dir/other.html | No
+http://example.com/dir/other.html | No
+http://www.example.com:80/dir/other.html | Maybe
 - are subdomains included in sop policy? yes
 - what about local storage? should example.com be able to set local storage on a.example.com?
 - implementation differs in the wild: http://www.filldisk.com/
