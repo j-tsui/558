@@ -177,11 +177,7 @@ content.
 ### Web Accesses w/ Side Effects
 - Recall our earlier banking URL:
     - http://mybank.com/moneyxfer.cgi?account=alice&amt=50&to=bob
-- So what happens if we visit evilsite.com, which includes:
-```
-<img5src="http://mybank.com/moneyxfer.cgi?
-555Account=alice&amt=500000&to=DrEvil">
-```
+- So what happens if we visit evilsite.com, which includes: `<img5src="http://mybank.com/moneyxfer.cgi?555Account=alice&amt=500000&to=DrEvil">`
 - Cross-Site Request Forgery (CSRF) attack
 
 ### CSRF For Email Tracking
@@ -189,3 +185,6 @@ content.
 - Has `img style="display:none!important"` -- Broswer makes get request to that image URL, which will run something on the server that does something. but user can't see it so doesn't know what's going on. That code ensures that the image isn't displayed. 
 - URL is proxied through google to maintain same origin 
 
+Sources:
+https://docs.google.com/presentation/d/1M0OvUYpO2zYaVwI5k7TT84QWotSZfI7_snfqBtt9cd4/edit#slide=id.g1d3ccfab30_0_271
+http://www.icir.org/vern/cs161-sp13/slides/2.28.WebAttacks3.pdf
