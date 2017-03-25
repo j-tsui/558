@@ -144,12 +144,20 @@ http://www.example.com:80/dir/other.html                 | Maybe        |
 - What about local storage? Should **example.com** be able to set local storage on **a.example.com**?
 - Implementation differs in the wild: http://www.filldisk.com/
 
-### XSS: Subverting the Same Origin Policy
-- have some attack vector where you can insert a script, and it gets run in the context of that page
-
-### two types of XSS (Cross-Site Scripting)
-- there are two main types of xss attacks
-- in a stored (or "persistant") XSS attack, 
+### Cross-Site Scripting (XSS): Subverting the SOP
+- It’d be Bad if an attacker from evil.com can fool your browser into executing script of their choice, with your browser believing the script’s origin to be some other site, like bank.com
+- One general approach for doing this is tp trick the server of interest (e.g., bank.com) to actually send the attacker’s script to your browser
+    - Then no matter how carefully your browser checks, it’ll view script as from the same origin (because it is!) and give it all that powerful/nasty access
+    
+### Two Types of XSS
+- Stored (or "persistant")
+    - **Target:** user with Javascript-enabled browser who visits user-generated-content page on vulnerable web service
+    - **Attacker goal:** run script in user’s browser with same access as provided to server’s regular scripts (subvert SOP)
+    - **Attacker tools:** ability to leave content on web server page (e.g., via an ordinary browser); optionally, a server used to receive stolen information such as cookies
+    - **Key trick:** server fails to ensure that content uploaded to page does not contain embedded scripts
+    - **Notes:** 
+        (1) do not confuse with Cross-Site Request Forgery (CSRF);
+        (2) requires use of Javascript
 ### stored xss
 ### stored xss: summary
 Notes (2) requires
