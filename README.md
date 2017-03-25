@@ -129,16 +129,18 @@ document.write("world: ", a+b, "</b>");
 - **https** operates on port *443* so https://example.com/ = https://example.com:443/	
 
 - Should the following be able to access cookies from http://www.example.com? 
-Site | Yes/No/Maybe 
---- | --- 
-http://www.example.com/dir/page2.html | Yes
-http://v2.www.example.com/dir/other.html | No
-http://username:password@www.example.com/dir2/other.html | Yes
-http://www.example.com:81/dir/other.html | No
-https://www.example.com/dir/other.html | No
-http://en.example.com/dir/other.html | No
-http://example.com/dir/other.html | No
-http://www.example.com:80/dir/other.html | Maybe
+
+|                           Site                         | Yes/No/Maybe |
+| ------------------------------------------------------ | ------------:|
+http://www.example.com/dir/page2.html                    | Yes          |       
+http://v2.www.example.com/dir/other.html                 | No           |
+http://username:password@www.example.com/dir2/other.html | Yes          |
+http://www.example.com:81/dir/other.html                 | No           |
+https://www.example.com/dir/other.html                   | No           |
+http://en.example.com/dir/other.html                     | No           |
+http://example.com/dir/other.html                        | No           |
+http://www.example.com:80/dir/other.html                 | Maybe        |
+
 - are subdomains included in sop policy? yes
 - what about local storage? should example.com be able to set local storage on a.example.com?
 - implementation differs in the wild: http://www.filldisk.com/
