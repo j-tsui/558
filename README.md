@@ -20,77 +20,111 @@ February 24, 2017
   - is .foo.com different from foo.com? NO!!
 - What pages should the cookie set with? path
 - Flags
-  - HostOnly: Can only be read by same domain that set it, foo.example.com sets it so bar.example.com cannot read it if HostOnly=1
-  - Session: A session cookie expires when the user navigates away from the website
-  - Secure: Cookie can only be sent over https
-  - HTTPOnly: Cannot be accessed with JavaScript (prevents most XSS)
+  - **HostOnly:** Can only be read by same domain that set it, foo.example.com sets it so bar.example.com cannot read it if HostOnly=1
+  - **Session:** A session cookie expires when the user navigates away from the website
+  - **Secure:** Cookie can only be sent over https
+  - **HTTPOnly:** Cannot be accessed with JavaScript (prevents most XSS)
   
   
   ```
-  +-----------+                                                       +-----------+
-  |           |                                                       |           |
-  |           |     POST \login                                       |           |
-  |           |     Host: cs558web.bu.edu                             |           |
-  |           |     username=attacker&password=l33th4x                |           |
-  |           |  ------------------------------------------------->>  |           |
-  |           |                                                       |           |
-  |           |     HTTP/1.1 303 See Other                            |           |
-  |           |     Location: http://cs558web.bu.edu/project2/        |           |
-  |           |     Set-Cookie: authuser="!28734y8273"                |           |
-  |   USER    |  <<-------------------------------------------------  | WEBSERVER |
-  |           |                                                       |           |
-  |           |     GET /project2/ HTTP/1.1                           |           |
-  |           |     Host: cs558web.bu.edu                             |           |
-  |           |     Cookie: authuser="!28734y8273";                   |           |
-  |           |  ------------------------------------------------->>  |           |
-  |           |                                                       |           |
-  |           |    HTTP/1.1 200 OK                                    |           |
-  |           |                                                       |           |
-  |           |    <html>...Protected HTML...</html>                  |           |
-  |           |  <<-------------------------------------------------  |           |
-  +-----------+                                                       +-----------+
+             +-----------+                                                       +-----------+
+             |           |                                                       |           |
+             |           |     POST \login                                       |           |
+             |           |     Host: cs558web.bu.edu                             |           |
+             |           |     username=attacker&password=l33th4x                |           |
+             |           |  ------------------------------------------------->>  |           |
+             |           |                                                       |           |
+             |           |     HTTP/1.1 303 See Other                            |           |
+             |           |     Location: http://cs558web.bu.edu/project2/        |           |
+             |           |     Set-Cookie: authuser="!28734y8273"                |           |
+             |   USER    |  <<-------------------------------------------------  | WEBSERVER |
+             |           |                                                       |           |
+             |           |     GET /project2/ HTTP/1.1                           |           |
+             |           |     Host: cs558web.bu.edu                             |           |
+             |           |     Cookie: authuser="!28734y8273";                   |           |
+             |           |  ------------------------------------------------->>  |           |
+             |           |                                                       |           |
+             |           |    HTTP/1.1 200 OK                                    |           |
+             |           |                                                       |           |
+             |           |    <html>...Protected HTML...</html>                  |           |
+             |           |  <<-------------------------------------------------  |           |
+             +-----------+                                                       +-----------+
   ```
   
- ### zombie cookies
- - cookei that's automatically recreated after being deleted. This is accomplished by storing the cookie's content in mult locations, such as Flash local shared object, html5 web storage
+### Zombie Cookies
+ - cookie that's automatically recreated after being deleted.
+ - How is this done?
+    - by storing the cookie's content in mult locations, such as Flash local shared object, HTML5 Web storage, and other client-side and even server-side locations. 
+    - When the cookie's absence is detected, the cookie is recreated using the data stored in these locations.           
  
-### 3rd party cookies
-- used for ad tracking
-- firefox, ie, opera, chrome do allow third-party cookies by default, as long as the tird party website has Compact Privacy Policy published. Newer versions of Safari block third-party cookies.
-- to check for them, inspect the page on chrome (seen under developer tools for sarafi)
-- how do these cookies get included?
-    - have iframe, and look what's included in that page. see that it has some javascript, which 
-    - take look at local storage, all of these tracking sites have some local storage files stored. 
+### 3rd Party Cookies (3P)
+- Used for ad tracking
+- Firefox, Internet Explorer, Opera, and Google Chrome do **allow third-party cookies by default**, as long as the tird party website has Compact Privacy Policy published.
+    - Newer versions of Safari block third-party cookies.
+- To check for them...
+    - Right click, then click 'Inspect' in Google Chrome
+    - For Safari, [do this](https://support.apple.com/kb/PH21414?viewlocale=en_LA&locale=en_LA)
+- How do these cookies get included?
+    - Have iframe, and look what's included in that page. See that it has some javascript.
+    - Take a look at local storage; all of these tracking sites have some local storage files stored. 
     - cookies can track you across different websites
-    - 'put script in this page, based on number of views, we will give you $$$'
-    
+    - Companies say: 'Hey, put this script in the page. Based on the number of views, we will give you $$$'
+  
+```
+<iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="http://staticxx.facebook.com/connect/xd_arbiter/r/1FegrZjPbq3.js?version=42#channel=fa383a9b0dbf38&amp;origin=http%3A%2F%2Fwww.huffingtonpost.com" style="border: none;"></iframe>
+```
+```
+HTTP/1.0 200 OK
+Set-Cookie: JEB2=58D...;expires=Sat, 23 Mar 2019 16:11:20 GMT; 
+domain=atwola.com;path=/
+```
+
 ### In the news
 - EU requires users agree to have cookies tored on their page
-- let's try it
-  - go to google.com
-  - change location to france (i used pia
-  - see change at http://www.ipfingerprints.com/
-  - refresh google.com
+- Let's try it!
+  - Go to google.com
+  - Change location to France (Sean used PIA)
+  - See change at [http://www.ipfingerprints.com/](http://www.ipfingerprints.com/)
+  - Refresh google.com
   
 ### Dynamic web pages
-- rather than static html, web pages can be expressed as a program, say written in javascript:
+- Rather than Static HTML, web pages can be expressed as a **program**, say written in *javascript*:
 
-### javascript
-- powerful web page programming language
-scripts are embedded in web pages retured by web server
-scripts are executed by brower
+```
+<title>Javascript demo page</title>
 
-confining the pwower of javascript scripts
-given all that power, browsers need to make sure js scripts don't abuse it
-for example, donw' want sc
+<font size=30>
+Hello, <b>
+<script>
+var a = 1;
+var b = 2;
+document.write("world: ", a+b, "</b>");
+</script>
+```
 
-### same origin policy
-broswers provide isolations for js scripts via the same origin policy (SOP)
-simple version:
-broswer associates web page elements (layout, cookies, events) with a given origin 
-sop = only scripts re
+### Javascript
+- Web page programming language
+- Scripts are embedded in web pages returned by web server
+- Scripts are executed by browser
 
-### origin definitions
+### Confining the Power of Javascript Scripts
+- Browsers need to ensure that JS scripts don't abuse their power
+    - don't want a script sent from **hackerz.com** web server to read cookies belonging to **bank.com**
+    - ... or read keystrokes typed by user at **bank.com**
+
+### Same Origin Policy (SOP)
+- broswers provide isolations for JS scripts via the **Same Origin Policy** 
+- Simple version:
+    - broswer associates web page elements (layout, cookies, events) with a given *origin*
+      - origin: web server that provided the page/cookies in the first place
+      - Identity of web server is in terms of its hostname, e.g., **bank.com**
+- SOP = **only scripts received from a web page’s origin have access to page’s elements**
+
+### Origin Definition
+- http://www.example.com:80/dir/page/htm
+  - **Protocol:** http://
+  - **Host:** www.example.com
+  - **Port:** :80
 - port 80
 - port 443
 
