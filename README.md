@@ -150,26 +150,42 @@ http://www.example.com:80/dir/other.html                 | Maybe        |
     - Then no matter how carefully your browser checks, it’ll view script as from the same origin (because it is!) and give it all that powerful/nasty access
     
 ### Two Types of XSS
-- Stored (or "persistant")
-    - **Target:** user with Javascript-enabled browser who visits user-generated-content page on vulnerable web service
-    - **Attacker goal:** run script in user’s browser with same access as provided to server’s regular scripts (subvert SOP)
-    - **Attacker tools:** ability to leave content on web server page (e.g., via an ordinary browser); optionally, a server used to receive stolen information such as cookies
-    - **Key trick:** server fails to ensure that content uploaded to page does not contain embedded scripts
-    - **Notes:** 
+- **Stored (or "persistant")**
+    - *Target:* user with Javascript-enabled browser who visits user-generated-content page on vulnerable web service
+    - *Attacker goal:* run script in user’s browser with same access as provided to server’s regular scripts (subvert SOP)
+    - *Attacker tools:* ability to leave content on web server page (e.g., via an ordinary browser); optionally, a server used to receive stolen information such as cookies
+    - *Key trick:* server fails to ensure that content uploaded to page does not contain embedded scripts
+    - *Notes:* 
         (1) do not confuse with Cross-Site Request Forgery (CSRF);
         (2) requires use of Javascript
-### stored xss
-### stored xss: summary
-Notes (2) requires
-saw demo in lab
+- **Reflected**
+    - *Target:* user with Javascript-enabled browser who visits a vulnerable web service that will include parts of URLs it receives in the web page output it generates
+    - *Attacker goal:*  run script in user’s browser with same access as provided to server’s regular scripts (subvert SOP)
+    - *Attacker tools:* ability to get user to click on a speciallycrafted URL; optionally, a server used to receive stolen information such as cookies
+    - *Key trick:* server fails to ensure that output it generates does not contain embedded scripts other than its own
+    - *Notes:* 
+        (1) do not confuse with Cross-Site Request Forgery (CSRF);
+        (2) requires use of Javascript
+        
+### Protecting Servers Against XSS (OWASP)
+- OWASP = Open Web Application Security Project
+- The best way to protect against XSS attacks:
+    - *Use White-listing:* Ensure that your app **validates** all headers, cookies, query strings, form fields, and hidden fields (i.e., all parameters) against a rigorous specification of **what should be allowed**.
+    - *Beware Black-listing:* **Do not** attempt to identify active content and remove, filter, or **sanitize** it. There are too many types of active content and too many ways of encoding it to get around filters for such
+content.
 
-### protexting servers against XSS (OWASP)
-how protext against cross site scripting?
-- 
+### Web Accesses w/ Side Effects
+- Recall our earlier banking URL:
+    - http://mybank.com/moneyxfer.cgi?account=alice&amt=50&to=bob
+- So what happens if we visit evilsite.com, which includes:
+```
+<img5src="http://mybank.com/moneyxfer.cgi?
+555Account=alice&amt=500000&to=DrEvil">
+```
+- Cross-Site Request Forgery (CSRF) attack
 
-### web accessed with side effects
-when the broswer goes to render the content, makes get request to get any resources it doesn't already have included in the page. make get request to url -- doesn't matter what's returned. on 
+### CSRF For Email Tracking
+- Application -- Boomerang. Injects JS in Gmail client. Email gets tracked and shows when/how often the other recipient opens it.
+- Has `img style="display:none!important"` -- Broswer makes get request to that image URL, which will run something on the server that does something. but user can't see it so doesn't know what's going on. That code ensures that the image isn't displayed. 
+- URL is proxied through google to maintain same origin 
 
--- application -- boomerang. injects javascript in gmail client. email gets tracked. showed when other person opens it 
--- has image display none -- broswer makes get request to that image url, which will run something on the server that does something. but user can't see it so doesn't know what's going on
--- 
