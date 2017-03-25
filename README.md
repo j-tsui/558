@@ -130,6 +130,7 @@ document.write("world: ", a+b, "</b>");
 
 - Should the following be able to access cookies from http://www.example.com? 
 Site | Yes/No/Maybe 
+--- | --- 
 http://www.example.com/dir/page2.html | Yes
 http://v2.www.example.com/dir/other.html | No
 http://username:password@www.example.com/dir2/other.html | Yes
